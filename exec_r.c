@@ -1,17 +1,20 @@
 #pragma once
-char *exec_r(char* cmd) {
-    char exec_cmd[255];
-    // if(cmd_type != "req") {
-    //     sprintf(exec_cmd, "curl ");
-    // }
-    sprintf(exec_cmd, "%s >> output.txt", cmd);
-    system(exec_cmd);
+#include<stdio.h>
+#include<stdlib.h>
 
-    FILE *ip_o;
+char *exec_r(char* cmd) {
+    FILE *outputFile = fopen("./output.txt", "w");
+    char exec_cmd[255];
+    if(outputFile)
+    {
+      printf("There was an error opening output.txt");   
+      return 1;             
+    }
+    fprintf(outputFile, "%s", cmd);
+
     char* response = (char*)malloc(sizeof(char)*255+1); 
-    ip_o = fopen("output.txt", "r");
-    fread(response, 255, 1, ip_o); 
-    fclose(ip_o);
-    system("rm -rf output.txt");
+    fread(response, 255, 1, outputFile); 
+    fclose(outputFile);
+    
     return response;
 }
